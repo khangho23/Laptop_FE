@@ -62,7 +62,7 @@ const Login = () => {
                                     </div>
                                     {/* Register */}
                                     <div className="form-check">
-                                        <a href="/register" className="form-check-label"> Đăng ký </a>
+                                        <a href="/registration" className="form-check-label"> Đăng ký </a>
                                     </div>
                                 </div>
                             </div>

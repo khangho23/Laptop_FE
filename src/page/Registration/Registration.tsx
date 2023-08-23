@@ -2,22 +2,21 @@ import { useCookies } from "react-cookie";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RegisterProps } from "src/common/types/RegisterProps";
 import { useFetch } from "src/util/CustomHook";
-import Input from "../components/Input";
+import Input from "../../components/Input";
 
-const Register = () => {
+const Registration = () => {
     const [cookie, setCookie] = useCookies(['user']);
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterProps>();
-    const onSubmit: SubmitHandler<RegisterProps> = (data) => {
 
+    const onSubmit: SubmitHandler<RegisterProps> = (data) => {
         async function init() {
             if (data.password === data.repassword) {
-                await useFetch.post("/api/auth/register", data).then(result => {
-                    alert("Đăng ký thành công !")
-                    setCookie("user", JSON.stringify(result.data))
-                    window.location.href = "http://localhost:3000/"
+                await useFetch.post("/api/auth/registration", data).then(result => {
+                    alert(result.data)
+                    window.location.href = "/registrationConfirm"
                 }).catch(errors => alert(errors.response.data.message))
             } else {
-                alert("Mật không đúng !")
+                alert("Mật không khớp vui lòng thử lại !")
             }
         }
         init();
@@ -100,4 +99,4 @@ const Register = () => {
         </>
     );
 }
-export default Register;
+export default Registration;
