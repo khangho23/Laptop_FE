@@ -1,5 +1,5 @@
-import { useCookies } from "react-cookie";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Input from "src/components/Input";
 import { useFetch } from "src/util/CustomHook";
 interface RegistrationConfirmProps {
@@ -7,16 +7,15 @@ interface RegistrationConfirmProps {
     code: string,
 }
 const RegistrationConfirm = () => {
-    const [cookie, setCookie] = useCookies(['user']);
     const { register, handleSubmit, formState: { errors } } = useForm<RegistrationConfirmProps>();
-
+    const navigate = useNavigate();
     const onSubmit: SubmitHandler<RegistrationConfirmProps> = (data) => {
         console.log(data);
 
         async function init() {
             await useFetch.post("/api/auth/registrationConfirm", data).then(result => {
                 alert(result.data)
-                window.location.href = "/login"
+                navigate("/login");
             }).catch(errors => alert(errors.response.data.message))
         }
         init();

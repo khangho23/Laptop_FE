@@ -1,5 +1,5 @@
-import Search from "src/page/Search/Search";
-import UserLayout from "../../components/Layout/UserLayout";
+import UserLayout from "src/components/Layout/UserLayout";
+import Search from "./Search";
 const SearchPage = () => {
     return (
         <UserLayout>

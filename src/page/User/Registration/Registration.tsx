@@ -1,19 +1,18 @@
-import { useCookies } from "react-cookie";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RegisterProps } from "src/common/types/RegisterProps";
 import { useFetch } from "src/util/CustomHook";
-import Input from "../../components/Input";
+import Input from "src/components/Input";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
-    const [cookie, setCookie] = useCookies(['user']);
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterProps>();
-
+    const navigate = useNavigate();
     const onSubmit: SubmitHandler<RegisterProps> = (data) => {
         async function init() {
             if (data.password === data.repassword) {
                 await useFetch.post("/api/auth/registration", data).then(result => {
                     alert(result.data)
-                    window.location.href = "/registrationConfirm"
+                    navigate("/registrationConfirm")
                 }).catch(errors => alert(errors.response.data.message))
             } else {
                 alert("Mật không khớp vui lòng thử lại !")
