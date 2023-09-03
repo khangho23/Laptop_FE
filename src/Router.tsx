@@ -2,18 +2,19 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminHome from "./page/Admin/AdminHome";
 import AdminReport from "./page/Admin/AdminReport";
 import BrandAdmin from "./page/Admin/Brand";
-import OrderAdmin from "./page/Admin/Order";
-import ProductAdmin from "./page/Admin/Product";
-import CartPage from "./page/CartPage";
-import DetailProduct from "./page/DetailProduct";
-import Home from "./page/Home";
-import Login from "./page/Login";
-import MyAccount from "./page/MyAccount";
-import Register from "./page/Register";
-import SearchPage from "./page/Search/SearchPage";
-import LoginAdmin from "./page/Admin/Login";
 import CustomerAdmin from "./page/Admin/Customer";
+import LoginAdmin from "./page/Admin/Login";
+import OrderAdmin from "./page/Admin/Order";
 import OrderDetal from "./page/Admin/Order/OrderDetail";
+import ProductAdmin from "./page/Admin/Product";
+import Home from "./page/User/Home";
+import Login from "./page/User/Login";
+import Registration from "./page/User/Registration/Registration";
+import RegistrationConfirm from "./page/User/Registration/RegistrationConfirm";
+import DetailProduct from "./page/User/DetailProduct";
+import SearchPage from "./page/User/Search/SearchPage";
+import CartPage from "./page/User/Cart/Cart";
+import MyAccount from "./page/User/MyAccount";
 
 const admin = [
   {
@@ -56,8 +57,12 @@ const user = [
     element: <Login />
   },
   {
-    path: "/register",
-    element: <Register />
+    path: "/registration",
+    element: <Registration />
+  },
+  {
+    path: "/registrationConfirm",
+    element: <RegistrationConfirm />
   },
   {
     path: "/product",

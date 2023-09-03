@@ -1,88 +1,43 @@
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import UserLayout from "src/components/Layout/UserLayout";
-import { FaMinus, FaPlus, FaTrash, FaHeart } from "react-icons/fa"
 import { useFetch } from "src/util/CustomHook";
 import { formatter } from "src/util/formatCurrency";
+import { useNavigate } from "react-router-dom";
+import CartItem from "./CartItem"
 
-const CartItem = ({ object, handleChangeUp, handleDeleteItem, enableButton }: { object: any, handleChangeUp: (value: any) => void, handleDeleteItem: (id: any) => void,enableButton?:boolean }) => {
-  return (
-    <>
-      <div className="row">
-        <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
-          {/* Image */}
-          <div className="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-            <img src={object.product.logo} className="w-100" />
-            <a href="#!">
-              <div className="mask" style={{ backgroundColor: 'rgba(251, 251, 251, 0.2)' }} />
-            </a>
-          </div>
-          {/* Image */}
-        </div>
-        <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-          {/* Data */}
-          <p><strong>{object.product.name}</strong></p>
-          <p>Màu sắc: {object.product.color.name}</p>
-          <button type="button" onClick={() => { handleDeleteItem(object.cartId); }} className="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove item">
-            <FaTrash />
-          </button>
-          <button type="button" className="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip" title="Move to the wish list">
-            <FaHeart />
-          </button>
-          {/* Data */}
-        </div>
-        <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-          {/* Quantity */}
-          <div className="d-flex mb-4" style={{ maxWidth: 300 }}>
-            <button className="btn btn-primary px-3 me-2 h-50" disabled>
-              <FaMinus />
-            </button>
-            <div className="form-outline">
-              <input id="form1" min={0} name="quantity" value={object.quantity} type="number" className="form-control" disabled />
-              <label className="form-label" htmlFor="form1">Số lượng</label>
-            </div>
-            <button onClick={() => { handleChangeUp(object.quantity) }} className="btn btn-primary px-3 ms-2 h-50" disabled >
-              <FaPlus />
-            </button>
-          </div>
-          {/* Quantity */}
-          {/* Price */}
-          <p className="text-start text-md-center">
-            <strong>{formatter.format(object.product.price)}</strong>
-          </p>
-          {/* Price */}
-        </div>
-      </div>
-      <hr className="my-4" />
-    </>
-  )
-}
-
-
-const CartPage = () => {
+const Cart = () => {
+  const navigate = useNavigate();
   const [cookie, setCookie] = useCookies(['user']);
   const [data, setData] = useState<any>();
+  const [quantity, setQuantity] = useState(1);
+
   const init = async () => {
     const { data: result } = await useFetch.get("/api/cart", { params: { userId: cookie.user.id } });
     setData(result);
   }
-  useEffect(() => {
 
-    init();
+  useEffect(() => {
+    if (cookie.user == null) {
+      navigate("/login");
+    } else {
+      init();
+    }
   }, []);
 
   const handleDeleteItem = async (id: any) => {
     const { data: result } = await useFetch.get("/api/cart/" + id);
-    if (result == 1) {
+    if (result === 1) {
       init();
     }
   }
+
   const sum = (a: any, b: any) => {
     return a + b;
   }
+
   const saveOrder = async (e: any) => {
-    e.preventDefault();
-    console.log(data);
+    // e.preventDefault();
     const param = {
       customerId: cookie.user.id,
       place: "",
@@ -91,12 +46,20 @@ const CartPage = () => {
       ]
     }
     const { data: result } = await useFetch.post("/api/order/save", param);
-    if (result == 1) {
-      window.location.href = "/my-account";
+    if (result === 1) {
+      navigate("/my-account");
     }
   }
+
+  const updateCart = async (data: any) => {
+    data = { ...data, quantity: quantity, userId: cookie.user.id };
+    const { data: result } = await useFetch.post("/api/cart/save", data);
+    console.log(result)
+  }
+
   console.log(data);
-  const total = data?.length == 0 ? 0 : data?.map((s: any) => s.quantity * s.product.price).reduce(sum);
+  const total = data?.length === 0 ? 0 : data?.map((s: any) => s.quantity * s.product.price).reduce(sum);
+
   return (
     <UserLayout>
       <div className="container">
@@ -111,11 +74,21 @@ const CartPage = () => {
                   <div className="card-body">
                     {
                       data?.map((s: any) => {
-                        const handleChangeUp = (value: any) => {
-                          // data.filter((y:any)=>y.id == s.id)[0];
-                          setData((e: any) => [...e, { ...s, quantity: value++ }])
+                        const handleIncrease = (value: any) => {
+                          setQuantity(s.quantity++)
+                          // updateCart(data)
                         }
-                        return <CartItem enableButton={false} handleChangeUp={handleChangeUp} object={s} handleDeleteItem={handleDeleteItem} />
+
+                        const handleDecrementQuantity = () => {
+                          if (s.quantity <= 1) return;
+
+                          setQuantity(s.quantity--);
+                        };
+
+                        return <CartItem
+                          enableButton={false} handleIncreaseQuantity={handleIncrease}
+                          handleDecreaseQuantity={handleDecrementQuantity} object={s} handleDeleteItem={handleDeleteItem}
+                        />
                       })
                     }
                   </div>
@@ -160,19 +133,11 @@ const CartPage = () => {
                             </li>
                             <li className="list-group-item d-flex justify-content-between align-items-center px-0">
                               Thành tiền
-                              <span>{formatter.format(s.quantity*s.product.price)}</span>
+                              <span>{formatter.format(s.quantity * s.product.price)}</span>
                             </li>
                           </>
                         })
                       }
-                      {/* <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                        Sản phẩm
-                        <span>{formatter.format(total || 0)}</span>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0">
-                        Giao hàng
-                        <span>Gratis</span>
-                      </li> */}
                       <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                         <div>
                           <strong>Tổng đơn hàng</strong>
@@ -197,4 +162,5 @@ const CartPage = () => {
     </UserLayout>
   )
 }
-export default CartPage;
+
+export default Cart;

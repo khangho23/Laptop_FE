@@ -1,17 +1,13 @@
-"use client"
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Brand } from "src/common/model/Brand";
-import { ProductFilter } from "src/common/types/ProductFilterProps";
-import { useFetch } from "src/util/CustomHook";
-import Card from "../../components/Card";
-import SelectInput from "../../components/Select";
-import { findBy_Brands_Products } from "src/api/SearchPage/route";
-import { Product } from "src/common/model/Product";
-import { Link } from "react-router-dom";
-import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 import { AiFillFastBackward, AiFillFastForward, AiFillForward, AiOutlineBackward } from "react-icons/ai";
-
+import { findBy_Brands_Products } from "src/api/SearchPage/route";
+import { Brand } from "src/common/model/Brand";
+import { Product } from "src/common/model/Product";
+import { ProductFilter } from "src/common/types/ProductFilterProps";
+import SelectInput from "src/components/Select";
+import { useFetch } from "src/util/CustomHook";
+import Card from "src/components/Card";
 interface Data {
     brands: Brand[],
     products: Product[]
