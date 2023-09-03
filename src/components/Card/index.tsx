@@ -10,7 +10,13 @@ const CardProduct = (props: CardProps) => {
             <Card.Body>
                 <hr />
                 <Card.Title>
-                    <Link className="card-title h5 text-decoration-none" to={"/product?id=" + props.data.id}>{props.data.name}</Link>
+                    <Link 
+                        className="card-title h5 text-decoration-none" 
+                        to={"/product?id=" + props.data.id}
+                        onClick={() => {window.scrollTo(0, 0)}}
+                    >
+                        {props.data.name}
+                    </Link>
                 </Card.Title>
             </Card.Body>
             <Card.Footer>

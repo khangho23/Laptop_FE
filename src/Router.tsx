@@ -13,7 +13,7 @@ import Registration from "./page/User/Registration/Registration";
 import RegistrationConfirm from "./page/User/Registration/RegistrationConfirm";
 import DetailProduct from "./page/User/DetailProduct";
 import SearchPage from "./page/User/Search/SearchPage";
-import CartPage from "./page/User/Cart/CartPage";
+import CartPage from "./page/User/Cart/Cart";
 import MyAccount from "./page/User/MyAccount";
 
 const admin = [

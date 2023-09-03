@@ -46,6 +46,8 @@ const DetailProduct = () => {
     };
 
     const handleDecrement = () => {
+        if (quantity <= 1) return;
+
         if (quantity > 0) {
             setQuantity(prevQuantity => prevQuantity - 1);
         }
@@ -65,10 +67,18 @@ const DetailProduct = () => {
                                         <img className="w-100 h-100" src={data?.logo} alt="" />
                                     </div>
                                 </div>
-                                <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                
+                                <button
+                                    className="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev"
+                                >
                                     <i className="fa fa-2x fa-angle-left text-dark" />
                                 </button>
-                                <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+
+                                <button
+                                    className="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleControls" data-bs-slide="next"
+                                >
                                     <i className="fa fa-2x fa-angle-right text-dark" />
                                 </button>
                             </div>
@@ -92,11 +102,16 @@ const DetailProduct = () => {
                                     Nonumy</p>
                                 <form className="d-flex align-items-center mb-4 pt-2" onSubmit={handleSubmit(submit)}>
                                     <input type="hidden" {...register("productId")} name='productId' value={query.get("id") || ""} />
-                                    <div className="input-group quantity" style={{ width: 130 }}>
+                                    <div className="input-group quantity" style={{ width: 180 }}>
                                         <button type='button' className="btn btn-warning rounded-0 btn-minus input-group-text" onClick={handleDecrement}>
                                             <i className="bi bi-dash" />
                                         </button>
-                                        <input type="number" {...register("quantity")} name='quantity' className="form-control border-1 text-center" value={quantity} />
+                                        <input
+                                            type="number" {...register("quantity")}
+                                            name='quantity'
+                                            className="form-control border-1 text-center"
+                                            value={quantity}
+                                        />
                                         <button type='button' className="btn btn-warning rounded-0 btn-plus input-group-text" onClick={handleIncrement}>
                                             <i className="bi bi-plus" />
                                         </button>
@@ -129,9 +144,20 @@ const DetailProduct = () => {
                         <div className="col ">
                             <div className=" p-3 shadow bg-white">
                                 <nav className="nav nav-tabs mb-4" id='nav-tab' role='tablist'>
-                                    <button className="nav-item btn btn-warning rounded-0 nav-link text-dark active" id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#tab-pane-1" type="button" role="tab" aria-controls="nav-pane-1" aria-selected="true">Thông tin sản phẩm</button>
-                                    <button className="nav-item btn btn-warning rounded-0 nav-link text-dark" id="nav-information-tab" data-bs-toggle="tab" data-bs-target="#tab-pane-2" type="button" role="tab" aria-controls="nav-pane-2" aria-selected="true">Information</button>
-                                    <button className="nav-item btn btn-warning rounded-0 nav-link text-dark" id="nav-reviews-tab" data-bs-toggle="tab" data-bs-target="#tab-pane-3" type="button" role="tab" aria-controls="nav-pane-3" aria-selected="true">Reviews (0)</button>
+                                    <button className="nav-item btn btn-warning rounded-0 nav-link text-dark active"
+                                        id="nav-description-tab" data-bs-toggle="tab" data-bs-target="#tab-pane-1"
+                                        type="button" role="tab" aria-controls="nav-pane-1" aria-selected="true"
+                                    >
+                                        Thông tin sản phẩm
+                                    </button>
+
+                                    <button
+                                        className="nav-item btn btn-warning rounded-0 nav-link text-dark"
+                                        id="nav-reviews-tab" data-bs-toggle="tab" data-bs-target="#tab-pane-2"
+                                        type="button" role="tab" aria-controls="nav-pane-3" aria-selected="true"
+                                    >
+                                        Đánh giá (0)
+                                    </button>
                                 </nav>
                                 <div className="tab-content" id="nav-tabContent">
                                     <div className="tab-pane fade show active p-4 " id="tab-pane-1" role="tabpanel" aria-labelledby="nav-description-tab">
@@ -143,61 +169,36 @@ const DetailProduct = () => {
                                                 </tr>
                                                 <tr>
                                                     <td>Màn hình:</td>
-                                                    <td>{data?.screen}</td>
+                                                    <td>{data?.display}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Bộ nhớ:</td>
+                                                    <td>RAM:</td>
+                                                    <td>{data?.ram}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ROM:</td>
                                                     <td>{data?.rom}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Thương hiệu:</td>
+                                                    <td>{data?.brand?.name} sản phẩm</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Màu sắc:</td>
+                                                    <td>{data?.color?.name}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Số lượng trong kho:</td>
+                                                    <td>{data?.quantity} sản phẩm</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ngày sản xuất:</td>
+                                                    <td>{data?.publishedDate}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div className="tab-pane fade p-4" id="tab-pane-2" role="tabpanel" aria-labelledby="nav-information-tab">
-                                        <h4 className="mb-3">Additional Information</h4>
-                                        <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam
-                                            invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod
-                                            consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum
-                                            diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam
-                                            sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor
-                                            aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam
-                                            kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.
-                                        </p>
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <ul className="list-group list-group-flush">
-                                                    <li className="list-group-item px-0">
-                                                        Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                                    </li>
-                                                    <li className="list-group-item px-0">
-                                                        Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                                    </li>
-                                                    <li className="list-group-item px-0">
-                                                        Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                                    </li>
-                                                    <li className="list-group-item px-0">
-                                                        Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <ul className="list-group list-group-flush">
-                                                    <li className="list-group-item px-0">
-                                                        Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                                    </li>
-                                                    <li className="list-group-item px-0">
-                                                        Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                                    </li>
-                                                    <li className="list-group-item px-0">
-                                                        Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                                    </li>
-                                                    <li className="list-group-item px-0">
-                                                        Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="tab-pane fade p-4" id="tab-pane-3" role="tabpanel" aria-labelledby="nav-reviews-tab">
+                                    <div className="tab-pane fade p-4" id="tab-pane-2" role="tabpanel" aria-labelledby="nav-reviews-tab">
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <h4 className="mb-4">1 review for "Product Name"</h4>
