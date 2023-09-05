@@ -52,8 +52,12 @@ const Cart = () => {
   }
 
   const updateCart = async (data: any) => {
-    data = { ...data, quantity: quantity, userId: cookie.user.id };
-    const { data: result } = await useFetch.post("/api/cart/save", data);
+    data = { 
+      cartId: data.cartId,
+      productId: data.productId, 
+      quantity: data.quantity, 
+      userId: cookie.user.id };
+    const { data: result } = await useFetch.put("/api/cart/update", data);
     console.log(result)
   }
 
@@ -74,15 +78,21 @@ const Cart = () => {
                   <div className="card-body">
                     {
                       data?.map((s: any) => {
-                        const handleIncrease = (value: any) => {
-                          setQuantity(s.quantity++)
-                          // updateCart(data)
+                        let currentQuantity = s.quantity;
+                        
+                        const handleIncrease = () => {
+                          setQuantity(currentQuantity++);
+                          s.quantity++;
+
+                          updateCart(s);
                         }
 
                         const handleDecrementQuantity = () => {
                           if (s.quantity <= 1) return;
+                          setQuantity(currentQuantity--);
+                          s.quantity--;
 
-                          setQuantity(s.quantity--);
+                          updateCart(s);
                         };
 
                         return <CartItem
